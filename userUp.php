@@ -1,0 +1,117 @@
+<?php
+include 'database.php';
+session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location: index.php");
+}
+?>
+
+
+<?php include('includes/header.php'); ?>
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Create New Folder </h4>
+                        <p class="card-description">
+                         
+                        <?php
+                                        if (isset($_SESSION['new_folder_created'])) {
+                                        ?>
+                                    <div id="notification" class="alert alert-success" role="alert">
+                                        <b> <i class="bi bi-check-circle-fill"></i>Success ! </b>New Folder created
+                                        successfully.
+                                    </div>
+                                <?php
+                                            unset($_SESSION['new_folder_created']);
+                                        }
+                                ?>
+                                  <?php
+                                if (isset($_SESSION['folder_exists'])) {
+                                ?>
+                                    <div id="notification" class="alert alert-danger" role="alert">
+                                        <b> <i class="bi bi-x-circle-fill"></i>Failed ! </b> Folder name not available.
+                                        Please choose another name.
+                                    </div>
+                                <?php
+                                    unset($_SESSION['folder_exists']);
+                                }
+                                ?>
+                    </p>
+                    <form class="forms-sample" action="newfolder.php" method="POST"  enctype="multipart/form-data">
+
+                    <div class="form-group">
+                                        <label for="exampleInputUsername1">Folder Name </label>
+                                        <input type="text" name="folder" class="form-control" id="exampleInputUsername1" placeholder="Document Name" required>
+                                    </div>
+
+                                    <button type="submit" name="sub" class="btn btn-primary me-2">Create Folder</button>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Folders List</h4>
+                                    <p class="card-description fs-5">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name </th>
+                                    <th>Created</th>
+                                    <th>Privacy</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                            $user = $_SESSION['id'];
+                                            $sql = "SELECT * from folders where folder_user = $user";
+                                            $result = $conn->query($sql);
+
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while ($row = $result->fetch_assoc()) {
+                                            ?><tr>
+                                            <td>
+                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 48 48">
+                                                    <linearGradient id="WQEfvoQAcpQgQgyjQQ4Hqa_dINnkNb1FBl4_gr1" x1="24" x2="24" y1="6.708" y2="14.977" gradientUnits="userSpaceOnUse">
+                                                        <stop offset="0" stop-color="#eba600"></stop>
+                                                        <stop offset="1" stop-color="#c28200"></stop>
+                                                    </linearGradient>
+                                                    <path fill="url(#WQEfvoQAcpQgQgyjQQ4Hqa_dINnkNb1FBl4_gr1)" d="M24.414,10.414l-2.536-2.536C21.316,7.316,20.553,7,19.757,7L5,7C3.895,7,3,7.895,3,9l0,30	c0,1.105,0.895,2,2,2l38,0c1.105,0,2-0.895,2-2V13c0-1.105-0.895-2-2-2l-17.172,0C25.298,11,24.789,10.789,24.414,10.414z">
+                                                    </path>
+                                                    <linearGradient id="WQEfvoQAcpQgQgyjQQ4Hqb_dINnkNb1FBl4_gr2" x1="24" x2="24" y1="10.854" y2="40.983" gradientUnits="userSpaceOnUse">
+                                                        <stop offset="0" stop-color="#ffd869"></stop>
+                                                        <stop offset="1" stop-color="#fec52b"></stop>
+                                                    </linearGradient>
+                                                    <path fill="url(#WQEfvoQAcpQgQgyjQQ4Hqb_dINnkNb1FBl4_gr2)" d="M21.586,14.414l3.268-3.268C24.947,11.053,25.074,11,25.207,11H43c1.105,0,2,0.895,2,2v26	c0,1.105-0.895,2-2,2H5c-1.105,0-2-0.895-2-2V15.5C3,15.224,3.224,15,3.5,15h16.672C20.702,15,21.211,14.789,21.586,14.414z">
+                                                    </path>
+                                                </svg>
+                                                <span class="text-capitalize"><?= $row['folder_name'] ?></span>
+                                            </td>
+                                            <td><?= date('d M Y', strtotime($row['folder_date'])) ?></td>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete<?= $row['folder_id'] ?>">
+                                                                Delete
+                                                            </button>
+                                                            <?php
+                                                }
+                                            }
+                                            $conn->close();
+                                            ?>
+</div>
+</div>
+
+</div>
+
+
+
+
+
+<?php include('includes/footer.php'); ?>
