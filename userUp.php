@@ -71,14 +71,17 @@ if (!isset($_SESSION["user"])) {
                             </thead>
                             <tbody>
                             <?php
-                                            $user = $_SESSION['id'];
-                                            $sql = "SELECT * from folders where folder_user = $user";
+                                            $user = $_SESSION['user'];
+                                            $sql = "SELECT * from folders where folder_user = '$user'";
+                                          //$sql = "SELECT * from folders where folder_user = ".$user;
+                                         
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
                                                 // output data of each row
                                                 while ($row = $result->fetch_assoc()) {
-                                            ?><tr>
+                                            ?>
+                                            <tr>
                                             <td>
                                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 48 48">
                                                     <linearGradient id="WQEfvoQAcpQgQgyjQQ4Hqa_dINnkNb1FBl4_gr1" x1="24" x2="24" y1="6.708" y2="14.977" gradientUnits="userSpaceOnUse">
@@ -96,15 +99,99 @@ if (!isset($_SESSION["user"])) {
                                                 </svg>
                                                 <span class="text-capitalize"><?= $row['folder_name'] ?></span>
                                             </td>
-                                            <td><?= date('d M Y', strtotime($row['folder_date'])) ?></td>
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete<?= $row['folder_id'] ?>">
+                                            <td><?= date('d M Y', strtotime($row['folder_date'])) ?></td><?php
+                                                            $lock = $row['folder_lock'];
+                                                            if ($lock == 1) {
+                                                            ?>
+                                                                <!-- Button trigger modal -->
+                                                                <button type="button" class="btn btn-inverse-success btn-icon rounded-pill btn-sm" data-bs-toggle="modal" data-bs-target="#locked<?= $row['folder_id'] ?>">
+                                                                    <i class="bi bi-lock-fill"></i> Locked
+                                                                </button>
+
+
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <button type="button" class="btn btn-inverse-danger btn-icon rounded-pill btn-sm" data-bs-toggle="modal" data-bs-target="#locked<?= $row['folder_id'] ?>">
+                                                                    <i class="bi bi-unlock-fill"></i> Unlocked
+                                                                </button>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                            <!-- Modal -->
+                                                            <div class="modal fade" id="locked<?= $row['folder_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog ">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body">
+                                                                            <form action="php/verify_pin.php" method="POST">
+                                                                                <label for="exampleInputEmail1" class="form-label">Enter PIN</label>
+                                                                                <input type="text" name="pin" maxlength="4" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                                                                <input type="hidden" name="folderid" value="<?= $row['folder_id'] ?>">
+                                                                                <div class="modal-footer">
+                                                                                    <button type="submit" class="btn btn-primary">
+                                                                                        <?php
+                                                                                        if ($lock == 1) {
+                                                                                            echo "Unlock";
+                                                                                        } else {
+                                                                                            echo "Lock";
+                                                                                        }
+
+                                                                                        ?>
+                                                                                    </button>
+            </div>
+                                                                            </form>
+                                                                            </button>
+            </div>
+                                                                            </form>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Button trigger modal -->
+                                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete<?= $row['folder_id'] ?>">
                                                                 Delete
                                                             </button>
-                                                            <?php
+                                                            <!-- Modal -->
+                                                            <div class="modal fade" id="delete<?= $row['folder_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body fs-6 text-wrap">
+                                                                            Are you sure want to delete
+                                                                            <b class="text-capitalize">"<?= $row['folder_name'] ?>"</b>
+                                                                            Folder ?
+                                                                            You can't undo this action.
+                                                                        </div>
+                                                                        <div class="modal-header d-flex flex-nowrap">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                            <a href="php/delete_folder.php?fid=<?= $row['folder_id'] ?>" class="btn btn-danger">Delete</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                            <?php
                                                 }
                                             }
                                             $conn->close();
                                             ?>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
 </div>
 </div>
 

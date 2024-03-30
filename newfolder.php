@@ -1,12 +1,16 @@
-
+<?php
+if (!isset($_SESSION['user'])) {
+   
+    
+}?>
 <?php
 include 'database.php';
 session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {$folderName = $_POST["folder"];
-    $user = $_SESSION['id'];
+    $user = $_SESSION['user'];
     $redirect = $_SERVER['HTTP_REFERER'];
-    $directory = "../folders_list/"; 
+    $directory = "folderlist/"; 
     if (!file_exists($directory . $folderName)) {
         if (mkdir($directory . $folderName, 0777, true)){
 
