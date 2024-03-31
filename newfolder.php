@@ -4,7 +4,7 @@ if (!isset($_SESSION['user'])) {
     
 }?>
 <?php
-include 'database.php';
+require 'database.php';
 session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {$folderName = $_POST["folder"];

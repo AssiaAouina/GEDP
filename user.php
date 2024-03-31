@@ -1,13 +1,15 @@
 <?php
 session_start();
+include 'database.php';
+
 if (!isset($_SESSION["user"])) {
     header("Location: index.php");
 }
-
 ?>
-<?php include('includes/header.php'); ?>
 
-<!--for time -->
+<?php require('includes/header.php'); ?>
+
+
 <div class="five">
     <h1> <?php
             if (isset($_SESSION['user'])) {
@@ -37,85 +39,65 @@ if (!isset($_SESSION["user"])) {
 
 <div>
 
-    <div class="main-panel">
-        <div class="content-wrapper">
-            <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Upload New Document</h4>
-                            <p class="card-description">
-</p>
-                        <form class="forms-sample" action="php/upload_new_document.php" method="POST" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="exampleInputUsername1">Document Name </label>
-                                <input type="text" name="name" class="form-control" id="exampleInputUsername1" placeholder="Document Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputUsername1">Folder </label>
-                                <select name="folder" class="form-control" id="" required>
-
-
-
-                                </select>
-                            </div>
- 
-                            <label for="exampleInputEmail1">Document Description (Optional)</label>
-
-
-                            <div class="flex-box">
-                                <div class="row">
-                                    <div class="col">
-
-                                        <button type="button" onclick="f1()" class=" shadow-sm btn btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Bold Text">
-                                            Bold</button>
-                                        <button type="button" onclick="f2()" class="shadow-sm btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Italic Text">
-                                            Italic</button>
-                                        <button type="button" onclick="f3()" class=" shadow-sm btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Left Align">
-                                            <i class="fas fa-align-left"></i></button>
-                                        <button type="button" onclick="f4()" class="btn shadow-sm btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Center Align">
-                                            <i class="fas fa-align-center"></i></button>
-                                        <button type="button" onclick="f5()" class="btn shadow-sm btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Right Align">
-                                            <i class="fas fa-align-right"></i></button>
-                                        <button type="button" onclick="f6()" class="btn shadow-sm btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Uppercase Text">
-                                            Upper Case</button>
-                                        <button type="button" onclick="f7()" class="btn shadow-sm btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Lowercase Text">
-                                            Lower Case</button>
-                                        <button type="button" onclick="f8()" class="btn shadow-sm btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Capitalize Text">
-                                            Capitalize</button>
-                                        <button type="button" onclick="f9()" class="btn shadow-sm btn-outline-primary side btn-sm" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-                                            Clear Text</button>
-                                    </div>
+<div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Upload New Document</h4>
+                                    <p class="card-description">
+                          
+                                    </p>
+                                    <form class="forms-sample" action="newdoc.php" method="POST" 
+                                        enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="exampleInputUsername1">Document Name </label>
+                                            <input type="text" name="name" class="form-control"
+                                                id="exampleInputUsername1" placeholder="Document Name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputUsername1">Folder </label>
+                                            <select name="folder" class="form-control" id="" required>
+                                                <option value="" selected hidden>Choose... </option>
+                                                <?php
+                                                $id = $_SESSION['user'];
+                                                $sql = "SELECT * from folders where folder_user =' $id'";
+                                                $result = $conn->query($sql);
+                                                
+                                                if ($result->num_rows > 0) {
+                                                  while($row = $result->fetch_assoc()) {
+                                                    ?>
+                                                <option value="<?=$row['folder_id']?>">
+                                                    <span class="text-capitalize"><?=$row['folder_name']?></span>
+                                                </option>
+                                                <?php
+                                                  }
+                                                }                                                 
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Document Description (Optional)</label>
+                                            <textarea id="inp_editor1" name="desc" class="form-control"></textarea>
+                                        </div>
+                                         
+                                        
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Upload File </label>
+                                            <input type="file" name="file" class="form-control" id="" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                        <button class="btn btn-secondary" type="reset">Reset</button>
+                                    </form>
                                 </div>
                             </div>
-                            <br>
-                            <div class="row">
-                                <div class="">
-                                </div>
-                                <div class="">
-                                    <div class="flex-box">
-                                        <textarea id="textarea1" name="desc" class="form-control"></textarea>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <br>
-                            <br>
-
-
-
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Upload File </label>
-                                <input type="file" name="file" class="form-control" id="" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary me-2">Submit</button>
-                            <button class="btn btn-secondary" type="reset">Reset</button>
-                        </form>
                         </div>
                     </div>
                 </div>
             </div>
+                </div>
+    </div>
 
-            <?php include('includes/footer.php'); ?>
+
+            <?php require('includes/footer.php'); ?>

@@ -11,7 +11,7 @@ if (!isset($_SESSION["user"])) {
 
 
  
- <?php include('includes/header.php');?>
+ <?php require('includes/header.php');?>
            
  <div class="five"> <h1>  <?php 
                         if(isset($_SESSION['user']))
@@ -42,4 +42,4 @@ if (!isset($_SESSION["user"])) {
                         
 
 
- <?php include('includes/footer.php');?>
+ <?php require('includes/footer.php');?>

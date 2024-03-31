@@ -21,9 +21,9 @@
     </head>
 
     <body class="sb-nav-fixed">
-    <?php include('navbar.php');?>
+    <?php require('navbar.php');?>
       <div id="layoutSidenav">
-      <?php include('sidebar.php');?>
+      <?php require('sidebar.php');?>
       <div id="layoutSidenav_content">
         
                 <main>

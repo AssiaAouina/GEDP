@@ -2,6 +2,11 @@
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
+  // if(isset($_POST['check'])){
+  //  setcookie('email'$_SESSION['email'], time() + 356*24*3600,null,null,false,true);
+    //  setcookie('password'$_SESSION['password'], time() + 356*24*3600,null,null,false,true);
+
+  // }
 }
 ?>
 <!DOCTYPE html>
@@ -49,6 +54,8 @@ if (isset($_SESSION["user"])) {
         <div class="form-btn">
             <input type="submit" value="Login" name="login" class="btn btn-primary">
         </div>
+        <input type="checkbox" name="check" id="check">
+        <label for="checkbox" name ="check" id=check>se souvenire de moi</label>
       </form>
      <div><p>Not registered yet <a href="registration.php">Register Here</a></p></div>
     </div>
